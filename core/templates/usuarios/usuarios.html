@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mazer Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/iconly/bold.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/app.css' %}">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- NAV -->
+        {% include 'partials/menu.html' %}
+        <!-- FIM NAV -->
+
+        <!-- CORPO DA PÁGINA -->
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <h3>Profile Statistics</h3>
+            </div>
+            <div class="page-content">
+                <section class="row">
+                    <div class="col-12 col-lg-9">
+
+                        <!-- BARRA DE PESQUISA -->
+                        <div class="row">
+                            <form>
+                                <div class="card p-3 d-flex flex-row">
+                                    <input class="form-control mr-sm-2" type="search" style="margin-left: 20px;"
+                                        placeholder="Digite aqui o que deseja consultar" aria-label="Search">
+
+                                    <button class="btn btn-outline-primary my-2 my-sm-0 mt-3 "
+                                        type="submit">Consultar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- FIM BARRA DE PESQUISA -->
+
+                        <div class="container">
+                            {% include 'partials/_alerts.html' %}
+                        </div>                        
+                        <div class="row">
+                            <!-- QUADRO -->
+                            {% for usuario in usuarios %}
+                            <div class="col col-lg-3">
+                                <div class="card">
+   
+                                    <div class="m-2">
+                                        <h4 class="mb-2 text-center">{{usuario.first_name}} {{usuario.last_name}}</h4>
+                                        <div class="d-flex justify-content-center"><img
+                                                src="{{usuario.usuario.foto_perfil.url}}" class="profile-square"
+                                                alt="Responsive image"></div>
+                                        <div class="mt-2">
+                                        </div>
+                                        {% if usuario.is_superuser %}
+                                        <div class="mt-2 btn-primary active text-center rounded">Administrador</div>
+                                        {% else %}
+                                        <div class="mt-2 btn-primary active text-center rounded">Usuário</div>
+                                        {% endif %}
+                                        {% if usuario.is_superuser and user.is_staff  %}
+
+                                        {% else %}
+                                        <div class="row">
+                                            <a class="col" href="{% url 'edita_usuario' usuario.id %}">
+                                                <div class="mt-2 btn-success text-center rounded cursor-pointer">Editar
+                                                </div>
+                                            </a>
+                                            {% if user.is_superuser %}
+                                            <a class="col" href="{% url 'deleta_usuario' usuario.id %}">
+                                                <div class="mt-2 btn-danger text-center rounded cursor-pointer">Deletar
+                                                </div>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <!-- FIM QUADRO -->
+
+                            </div>
+
+                        <p class="text-center mb-0">
+                            <span class="text-primary"><strong>2</strong></span> de <span
+                                class="text-primary"><strong>10</strong></span>
+                        </p>
+
+                        <!--  PAGINAÇÃO -->
+                        {% if usuarios.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {% if usuarios.has_previous %}
+                                <<li class="page-item">
+                                    <a class="page-link" href="?page={{usuarios.previous_page_number}}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% for pagina in usuarios.paginator.page_range %}
+                                {% if usuarios.number == pagina %}
+                                <li class="page-item">
+                                    <a class="page-link">{{pagina}}</a>
+                                </li>
+                               {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{pagina}}">{{pagina}}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if usuarios.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{usuarios.next_page_number}}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        <!--  FIM PAGINAÇÃO -->
+                       <!--  PAGINAÇÃO -->
+                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 primeiras páginas, deverá aparecer as 4 primeiras e a última na tela // 
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><button class="page-link">...</button></li>
+                                <li class="page-item"><a class="page-link" href="#">11</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        FIM PAGINAÇÃO -->
+
+                        <!--  PAGINAÇÃO -->
+                        <!--  Se o número de páginas for maior do que 10 e se a página que o usuário está for maior do que 4 e menor do que o total de páginas menos 4, deverá aparecer a primeira página, a última página e os 2 sucessores e antecessores da página atual na tela ///
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><button class="page-link">...</button></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                <li class="page-item"><a class="page-link" href="#">6</a></li>
+                                <li class="page-item"><a class="page-link" href="#">7</a></li>
+                                <li class="page-item"><button class="page-link">...</button></li>
+                                <li class="page-item"><a class="page-link" href="#">11</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                         FIM PAGINAÇÃO -->
+
+                        <!--  PAGINAÇÃO -->
+                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 últimas páginas, deverá aparecer a primeira e as 4 últimas páginas na tela //
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><button class="page-link">...</button></li>
+                                <li class="page-item"><a class="page-link" href="#">8</a></li>
+                                <li class="page-item"><a class="page-link" href="#">9</a></li>
+                                <li class="page-item"><a class="page-link" href="#">10</a></li>
+                                <li class="page-item"><a class="page-link" href="#">11</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                          FIM PAGINAÇÃO -->
+                    </div>
+
+ <!-- USUÁRIOS -->
+ <div class="col-12 col-lg-3">
+
+    <!-- USUÁRIO LOGADO-->
+    <div class="card">
+        <div class="card-body py-4">
+            <div class="d-flex align-items-center">
+                <div class="avatar avatar-xl">
+                    <img src="{{user.usuario.foto_perfil.url}}" alt="Face 1">
+                </div>
+                <div class="name ms-4">
+                    <h5 class="mb-1">{{user.first_name}} {{user.last_name}}</h5>
+                    <h6 class="text-muted mb-0">@{{user.username}}</h6>
+                </div>
+            </div>
+            <div class="w-100 mt-3">
+                <a href="{% url 'edita_usuario' user.id %}">
+                    <div class= "btn-success active text-center rounded">Editar</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- FIM USUÁRIO LOGADO -->
+
+    <!-- ÚLTIMOS USUÁRIOS REGISTRADO -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Últimos usuários registrados</h4>
+        </div>
+        {% for last_usuarios in usuarios_ultimos %}
+        <div class="card-content pb-4">
+            <!-- USUÁRIO 1 -->
+            <div class="recent-message d-flex px-4 py-3">
+                <div class="avatar avatar-lg">
+                    <img src="{{last_usuarios.usuario.foto_perfil.url}}">
+                </div>
+                <div class="name ms-4">
+                    <h5 class="mb-1">{{last_usuarios.first_name}} {{last_usuarios.last_name}}</h5>
+                    <h6 class="text-muted mb-0">@{{last_usuarios.username}}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>    <!-- FIM ÚLTIMOS USUÁRIOS REGISTRADO -->
+
+
+                        <!-- FIM USUÁRIOS -->
+                </section>
+            </div>
+
+            <!-- FOOTER -->
+            {% include 'partials/footer.html' %}
+            <!-- FIM FOOTER -->
+
+        </div>
+        <!-- FIM CORPO DA PÁGINA -->
+    </div>
+    <script src="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'assets/vendors/apexcharts/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input - Mazer Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/app.css' %}">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+</head>
+
+<body>
+    <div id="app">
+
+        {% include 'partials/menu.html' %}        
+        <!-- CORPO DA PÁGINA -->
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Editar {{produ.nome_produto}} </h3>
+                            <div class="container">
+                                {% include 'partials/_alerts.html' %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar {{produ.nome_produto}}</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section class="section">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form action="{% url 'atualizar_produto' produ.id %}" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="text" class="form-control mb-3 w-100"
+                                                placeholder="{{produ.id}}" name="id_produto" value="{{produ.id}}" hidden>
+                                        <div class="form-group">
+                                            <label for="nome_produto"><h6>Nome do produto</h6></label>
+                                            <input type="text" class="form-control mb-3 w-100" id="nome_produto"
+                                                placeholder="{{produ.nome_produto}}" name="nome_produto" value="{{produ.nome_produto}}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email"><h6>Email para contato</h6></label>
+                                            <input value="{{user.email}}" type="email" class="form-control mb-3 w-100" id="email"
+                                                placeholder="{{user.email}}" name="email">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="preco_produto"><h6>Preço do produto</h6></label>
+                                            <input type="number" step="any" class="form-control mb-3 w-100" id="preco_produto"
+                                                placeholder="{{produ.preco_produto}}" value="{{produ.preco_produto}}" min="0" name="preco">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="imagem_produto"><h6>Foto utilizada</h6></label>
+                                            <img src="{{produ.imagem_produto.url}}" class="img-fluid rounded" alt="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="imagem_produto"><h6>Escolha uma imagem para o produto</h6></label>
+                                            <input type="file" class="form-control mb-3 w-100" id="imagem_produto" name="foto_produto">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="exampleFormControlTextarea1" class="form-label"><h6>Descrição</h6></label>
+                                                <textarea class="form-control w-100" id="exampleFormControlTextarea1"
+                                                    rows="3" placeholder="{{produ.descricao}}" value="{{produ.descricao}}" name="descricao"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <h6>Categoria</h6>
+                                            <fieldset class="form-group">
+                                                <select class="form-select" id="basicSelect" placeholder="{{produ.categoria}}" value="{{produ.categoria}}" name="categoria">
+                                                    <option>Eletrônicos</option>
+                                                    <option>Televisão</option>
+                                                    <option>Computador</option>
+                                                    <option>Celular</option>
+                                                    <option>Áudio e Vídeo</option>
+                                                </select>
+                                            </fieldset>
+                                        </div>
+
+
+                                        <div class="col-md-6 mt-5">
+                                            <button class=" btn btn-success my-2 my-sm-0 mt-3" type="submit">Editar produto</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- FIM CORPO DA PÁGINA -->
+
+        {% include 'partials/footer.html' %}
+        </div>
+        <!-- FIM CORPO DA PÁGINA -->
+    </div>
+    <script src="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>

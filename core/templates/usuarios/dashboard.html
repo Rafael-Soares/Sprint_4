@@ -17,69 +17,7 @@
 <body>
     <div id="app">
 
-        <!-- NAV -->
-        <div id="sidebar" class="active">
-            <div class="sidebar-wrapper active">
-                <div class="sidebar-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="logo">
-                            <a href="dashboard.html"><img src="{% static 'assets/images/logo/logo.png' %}" alt="Logo" srcset=""></a>
-                        </div>
-                        <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="sidebar-menu">
-                    <ul class="menu">
-                        <li class="sidebar-title">Menu</li>
-
-                        <li class="sidebar-item active ">
-                            <a href="dashboard.html" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-hexagon-fill"></i>
-                                <span>Produtos</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="meus-produtos.html">Meus produtos</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="registrar-produtos.html">Registrar produto</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="editar-produto.html">Editar produto</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="usuarios.html" class='sidebar-link'>
-                                <i class="bi bi-person-bounding-box"></i>
-                                <span>Usuários (Admin)</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="{% url 'logout' %}" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-left"></i>
-                                <span>Sair</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
-            </div>
-        </div>
-        <!-- FIM NAV -->
-        
+        {% include 'partials/menu.html'%}        
         <!-- CORPO DA PÁGINA -->
         <div id="main">
             <header class="mb-3">
@@ -90,6 +28,9 @@
 
             <div class="page-heading">
                 <h3>Dashboard - {{user.username}}</h3>
+            </div>
+            <div class="container">
+                {% include 'partials/_alerts.html' %}
             </div>
             <div class="page-content">
                 <section class="row">
@@ -107,7 +48,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Produtos</h6>
-                                                <h6 class="font-extrabold mb-0">112.000</h6>
+                                                <h6 class="font-extrabold mb-0">{{qtd}}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +66,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Usuários</h6>
-                                                <h6 class="font-extrabold mb-0">183.000</h6>
+                                                <h6 class="font-extrabold mb-0">{{qtd_usu}}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +84,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Último post</h6>
-                                                <h6 class="font-extrabold mb-0">12/05/2021</h6>
+                                                <h6 class="font-extrabold mb-0">{{pro_ulti.data_criacao}}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -165,74 +106,30 @@
 
                         <div class="row">
                             <!-- QUADROS -->
+                            {% for pro in produtos %}
                             <div class="col col-lg-4">
                                 <div class="card">
                                     <div class="m-2">
-                                        <h4 class="mb-0">Nome do produto</h4>
-                                        <p class="text-justify">Categoria</p>
-                                        <img src="{% static 'assets\images\samples\default image.png' %}" class="img-fluid rounded" alt="Responsive image">
+                                        <h4 class="mb-0">{{pro.nome_produto}}</h4>
+                                        <p class="text-justify">{{pro.categoria}}</p>
+                                        <img src="{{pro.imagem_produto.url}}" class="img-fluid rounded" alt="Responsive image">
                                         <div class= "mt-2">
-                                            <p class="text-justify mb-0">16/05/2021</p>
+                                            <p class="text-justify mb-0">{{pro.data_criacao}}</p>
                                         </div>
                                         <div class= "mt-2">
-                                            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid...</p>
+                                            <p class="text-justify">{{pro.descricao}}</p>
                                         </div>
-                                        <div class= "mt-2 btn-primary active text-center rounded">R$ 29,00</div>
+                                        <div class= "mt-2 btn-primary active text-center rounded">R$ {{pro.preco_produto}}</div>
                                         <hr>
-                                        <div class= "mt-2">emailpadrão@teste.com</div>
+                                        <div class= "mt-2">{{pro.email}}</div>
                                         <div class= "mt-2">
-                                            <p class="text-right" style="text-align: right;">AF4G2D</p>
+                                            <p class="text-right" style="text-align: right;">{{pro.codigo}}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- FIM QUADROS -->
+                            {% endfor %}
                             <!-- QUADROS -->
-                            <div class="col col-lg-4">
-                                <div class="card">
-                                    <div class="m-2">
-                                        <h4 class="mb-0">Nome do produto</h4>
-                                        <p class="text-justify">Categoria</p>
-                                        <img src="{% static 'assets\images\samples\default image.png' %}" class="img-fluid rounded" alt="Responsive image">
-                                        <div class= "mt-2">
-                                            <p class="text-justify mb-0">16/05/2021</p>
-                                        </div>
-                                        <div class= "mt-2">
-                                            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid...</p>
-                                        </div>
-                                        <div class= "mt-2 btn-primary active text-center rounded">R$ 29,00</div>
-                                        <hr>
-                                        <div class= "mt-2">emailpadrão@teste.com</div>
-                                        <div class= "mt-2">
-                                            <p class="text-right" style="text-align: right;">AF4G2D</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- FIM QUADROS -->
-                            <!-- QUADROS -->
-                            <div class="col col-lg-4">
-                                <div class="card">
-                                    <div class="m-2">
-                                        <h4 class="mb-0">Nome do produto</h4>
-                                        <p class="text-justify">Categoria</p>
-                                        <img src="{% static 'assets\images\samples\default image.png' %}" class="img-fluid rounded" alt="Responsive image">
-                                        <div class= "mt-2">
-                                            <p class="text-justify mb-0">16/05/2021</p>
-                                        </div>
-                                        <div class= "mt-2">
-                                            <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid...</p>
-                                        </div>
-                                        <div class= "mt-2 btn-primary active text-center rounded">R$ 29,00</div>
-                                        <hr>
-                                        <div class= "mt-2">emailpadrão@teste.com</div>
-                                        <div class= "mt-2">
-                                            <p class="text-right" style="text-align: right;">AF4G2D</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- FIM QUADROS -->
                         </div>
                         <p class="text-center mb-0">
                             <span class="text-primary"><strong>2</strong></span> de <span class="text-primary"><strong>10</strong></span>
@@ -240,6 +137,55 @@
                 
                         <!--  PAGINAÇÃO -->
                         <!--  Se o número de páginas for menor ou igual a 10 deverá aparecer todas as páginas na tela -->
+                        {% if produtos.has_other_pages %}
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {% if produtos.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{produtos.previous_page_number}}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li> 
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% for pagina in produtos.paginator.page_range %}
+                                {% if produtos.number == pagina %}
+                                <li class="page-item">
+                                    <a class="page-link">{{pagina}}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{pagina}}" aria-label="Next">
+                                        {{pagina}}
+                                    </a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if produtos.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{produtos.next_page_number}}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        <!--  FIM PAGINAÇÃO -->
+                        
+                        <!--  PAGINAÇÃO -->
+                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 primeiras páginas, deverá aparecer as 4 primeiras e a última na tela // 
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item">
@@ -251,34 +197,6 @@
                                 <li class="page-item"><a class="page-link" href="#">2</a></li>
                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                                 <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                <li class="page-item"><a class="page-link" href="#">8</a></li>
-                                <li class="page-item"><a class="page-link" href="#">9</a></li>
-                                <li class="page-item"><a class="page-link" href="#">10</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!--  FIM PAGINAÇÃO -->
-
-                        <!--  PAGINAÇÃO -->
-                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 primeiras páginas, deverá aparecer as 4 primeiras e a última na tela -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
                                 <li class="page-item"><button class="page-link">...</button></li>
                                 <li class="page-item"><a class="page-link" href="#">11</a></li>
                                 <li class="page-item">
@@ -288,10 +206,10 @@
                                 </li>
                             </ul>
                         </nav>
-                        <!--  FIM PAGINAÇÃO -->
+                        FIM PAGINAÇÃO -->
 
                         <!--  PAGINAÇÃO -->
-                        <!--  Se o número de páginas for maior do que 10 e se a página que o usuário está for maior do que 4 e menor do que o total de páginas menos 4, deverá aparecer a primeira página, a última página e os 2 sucessores e antecessores da página atual na tela -->
+                        <!--  Se o número de páginas for maior do que 10 e se a página que o usuário está for maior do que 4 e menor do que o total de páginas menos 4, deverá aparecer a primeira página, a última página e os 2 sucessores e antecessores da página atual na tela ///
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item">
@@ -315,10 +233,10 @@
                                 </li>
                             </ul>
                         </nav>
-                        <!--  FIM PAGINAÇÃO -->
+                         FIM PAGINAÇÃO -->
 
                         <!--  PAGINAÇÃO -->
-                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 últimas páginas, deverá aparecer a primeira e as 4 últimas páginas na tela -->
+                        <!--  Se o número de páginas for maior do que 10 e se o usuário estiver em uma das 4 últimas páginas, deverá aparecer a primeira e as 4 últimas páginas na tela //
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item">
@@ -339,7 +257,7 @@
                                 </li>
                             </ul>
                         </nav>
-                        <!--  FIM PAGINAÇÃO -->
+                          FIM PAGINAÇÃO -->
                     </div>
 
                     <!-- USUÁRIOS -->
@@ -350,15 +268,15 @@
                             <div class="card-body py-4">
                                 <div class="d-flex align-items-center">
                                     <div class="avatar avatar-xl">
-                                        <img src="{% static 'assets/images/faces/1.jpg' %}" alt="Face 1">
+                                        <img src="{{user.usuario.foto_perfil.url}}" alt="Face 1">
                                     </div>
-                                    <div class="ms-3 name">
-                                        <h5 class="font-bold">John Duck</h5>
-                                        <h6 class="text-muted mb-0">@johnducky</h6>
+                                    <div class="name ms-4">
+                                        <h5 class="mb-1">{{user.first_name}} {{user.last_name}}</h5>
+                                        <h6 class="text-muted mb-0">@{{user.username}}</h6>
                                     </div>
                                 </div>
                                 <div class="w-100 mt-3">
-                                    <a href="editar-usuario.html">
+                                    <a href="{% url 'edita_usuario' user.id %}">
                                         <div class= "btn-success active text-center rounded">Editar</div>
                                     </a>
                                 </div>
@@ -371,41 +289,20 @@
                             <div class="card-header">
                                 <h4>Últimos usuários registrados</h4>
                             </div>
+                            {% for usu in usuarios_ultimos %}
                             <div class="card-content pb-4">
                                 <!-- USUÁRIO 1 -->
                                 <div class="recent-message d-flex px-4 py-3">
                                     <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets/images/faces/4.jpg' %}">
+                                        <img src="{{usu.usuario.foto_perfil.url}}">
                                     </div>
                                     <div class="name ms-4">
-                                        <h5 class="mb-1">Hank Schrader</h5>
-                                        <h6 class="text-muted mb-0">@johnducky</h6>
+                                        <h5 class="mb-1">{{usu.first_name}} {{usu.last_name}}</h5>
+                                        <h6 class="text-muted mb-0">@{{usu.username}}</h6>
                                     </div>
                                 </div>
-
-                                <!-- USUÁRIO 2 -->
-                                <div class="recent-message d-flex px-4 py-3">
-                                    <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets/images/faces/5.jpg' %}">
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h5 class="mb-1">Dean Winchester</h5>
-                                        <h6 class="text-muted mb-0">@imdean</h6>
-                                    </div>
-                                </div>
-
-                                <!-- USUÁRIO 3 -->
-                                <div class="recent-message d-flex px-4 py-3">
-                                    <div class="avatar avatar-lg">
-                                        <img src="{% static 'assets/images/faces/1.jpg' %}">
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h5 class="mb-1">John Dodol</h5>
-                                        <h6 class="text-muted mb-0">@dodoljohn</h6>
-                                    </div>
-                                </div>
-
                             </div>
+                            {% endfor %}
                         </div>
                         <!-- FIM ÚLTIMOS USUÁRIOS REGISTRADO -->
                     </div>
@@ -413,19 +310,7 @@
                 </section>
             </div>
 
-            <!-- FOOTER -->
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>2021 &copy; Mazer</p>
-                    </div>
-                    <div class="float-end">
-                        <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                                href="http://ahmadsaugi.com">A. Saugi</a></p>
-                    </div>
-                </div>
-            </footer>
-            <!-- FIM FOOTER -->
+        {% include 'partials/footer.html' %}
         </div>
         <!-- FIM CORPO DA PÁGINA -->
     </div>

@@ -1,3 +1,4 @@
+from apps.produtos.views import atualizar_produto
 from os import name
 from django.contrib import admin
 from django.urls import path
@@ -10,6 +11,10 @@ urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.logout, name='logout'),
+    path('usuarios/', views.usuarios, name='usuarios'),
+    path('deleta_usuario/<int:usuario_id>', views.deleta_usuario, name='deleta_usuario'),
+    path('edita_usuario/<int:usuario_id>', views.edita_usuario, name='edita_usuario'),
+    path('atualiza_usuario/<int:usuario_id>', views.atualiza_usuario, name='atualiza_usuario' ),
     #paths de redefinição de senha
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name="redefinicao_senha/auth-forgot-password.html"), name="reset_password" ),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(template_name="redefinicao_senha/sucesso.html"),

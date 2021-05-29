@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon">
+    <title>Input - Mazer Admin Dashboard</title>
+
+</head>
+<body>
+    <div id="app">
+
+        <!-- NAV -->
+        {% include 'partials/menu.html' %}
+        <!-- FIM NAV -->
+        
+        <!-- CORPO DA PÁGINA -->
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+
+            <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Editar {{usuario_editar.first_name}} {{usuario_editar.last_name}}</h3>
+                            <div class="container">
+                                {% include 'partials/_alerts.html' %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Editar {{usuario_editar.first_name}} {{usuario_editar.last_name}}</li>
+
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section class="section">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form action="{% url 'atualiza_usuario' usuario_editar.id %}" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input name="id" value="{{ usuario_editar.id }}" type="number" hidden>
+                                            <label for="nome_produto"><h6>Primeiro nome</h6></label>
+                                            <input type="text" class="form-control mb-3 w-100" id="nome_produto"
+                                                placeholder="{{usuario_editar.first_name}}" value ="{{usuario_editar.first_name}}" name="primeiro_nome">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nome_produto"><h6>Segundo nome</h6></label>
+                                            <input type="text" class="form-control mb-3 w-100" id="nome_produto"
+                                                placeholder="{{usuario_editar.last_name}}" value ="{{usuario_editar.last_name}}" name="segundo_nome">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email"><h6>Email</h6></label>
+                                            <input type="email" class="form-control mb-3 w-100" id="email"
+                                                placeholder="{{usuario_editar.email}}" value ="{{usuario_editar.email}}" name="email">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="senha"><h6>Senha</h6></label>
+                                            <input type="password" class="form-control mb-3 w-100" id="senha"
+                                                placeholder="Digite sua senha" value ="{{usuario_editar.password}}" name="senha">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="conf_senha"><h6>Confirmar Senha</h6></label>
+                                            <input type="password" class="form-control mb-3 w-100" id="conf_senha"
+                                                placeholder="Confirme sua senha" value ="{{usuario_editar.password}}" name="senha2">
+                                        </div>
+                                        <div class="form-group">
+                                            <p class="mb-3 w-100">* Sua senha não pode ser muito semelhante às suas outras informações pessoais</p>
+                                            <p class="mb-3 w-100">* Sua senha deve conter pelo menos 8 caracteres</p>
+                                            <p class="mb-3 w-100">* Sua senha não pode ser totalmente numérica</p>   
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="imagem_produto"><h6>Escolha uma foto de perfil</h6></label>
+                                            <input type="file" class="form-control mb-3 w-100" id="imagem_produto" name="foto_usuario">
+                                        </div>
+
+                                        <!-- Apenas admin pode editar esse campo-->
+                                        {% if user.is_superuser %}
+                                        <div class="col-md-6">
+                                            <h6> Nível de usuário (ADMIN)</h6>
+                                            <fieldset class="form-group">
+                                                <select name="nivel_usuario" value ="{{Usuário}}" class="form-select" id="basicSelect">
+                                                    <option>Usuário</option>
+                                                    <option>Staff</option> <!-- Não pode apagar usuário, apenas editar (não pode editar o nível de usuário) -->
+                                                    <option>Admin</option>
+                                                </select>
+                                            </fieldset>
+                                        </div>
+                                        {% else %}
+                                        <input type="text" value="{{Usuário}}"  name="nivel_usuario" hidden>
+                                       {% endif %}
+
+                                        <div class="col-md-6 mt-5">
+                                            <button class=" btn btn-success my-2 my-sm-0 mt-3" type="submit">Editar usuário</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- FIM CORPO DA PÁGINA -->
+
+            <!-- FOOTER -->
+            {% include 'partials/footer.html' %}     
+            <!-- FIM FOOTER -->
+        </div>
+        <!-- FIM CORPO DA PÁGINA -->
+    </div>
+{% endblock %}
