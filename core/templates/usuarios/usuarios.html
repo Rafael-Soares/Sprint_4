@@ -43,9 +43,9 @@
 
                         <!-- BARRA DE PESQUISA -->
                         <div class="row">
-                            <form>
+                            <form method="GET">
                                 <div class="card p-3 d-flex flex-row">
-                                    <input class="form-control mr-sm-2" type="search" style="margin-left: 20px;"
+                                    <input class="form-control mr-sm-2" name="nome_usuario" type="text" type="search" style="margin-left: 20px;"
                                         placeholder="Digite aqui o que deseja consultar" aria-label="Search">
 
                                     <button class="btn btn-outline-primary my-2 my-sm-0 mt-3 "
@@ -76,8 +76,10 @@
                                         {% else %}
                                         <div class="mt-2 btn-primary active text-center rounded">Usuário</div>
                                         {% endif %}
+                                        
+                                        
                                         {% if usuario.is_superuser and user.is_staff  %}
-
+                                    
                                         {% else %}
                                         <div class="row">
                                             <a class="col" href="{% url 'edita_usuario' usuario.id %}">

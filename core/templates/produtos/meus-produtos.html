@@ -40,11 +40,12 @@
 
                         <!-- BARRA DE PESQUISA -->
                         <div class="row">
-                            <form>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
                                 <div class="card p-3 d-flex flex-row">
-                                    <input class="form-control mr-sm-2" type="search" style="margin-left: 20px;" placeholder="Digite aqui o que deseja consultar" aria-label="Search">
+                                    <input class="form-control mr-sm-2" name="nome_produto" type="text" type="search" style="margin-left: 20px;" placeholder="Digite aqui o que deseja consultar" aria-label="Search">
 
-                                    <button class="btn btn-outline-primary my-2 my-sm-0 mt-3 " type="submit">Consultar</button>
+                                    <button class="btn btn-outline-primary my-2 my-sm-0 mt-3" type="submit">Consultar</button>
                                 </div>
                             </form>  
                         </div>
@@ -56,7 +57,7 @@
                             <div class="col col-lg-4">
                                 <div class="card">
                                     <div class="m-2">
-                                        <h4 class="mb-0">{{user.first_name}} {{user.last_name}}</h4>
+                                        <h4 class="mb-0">{{produtinhos.nome_produto}}</h4>
                                         <p class="text-justify">{{produtinhos.categoria}}</p>
                                         <img src="{{produtinhos.imagem_produto.url}}" class="img-fluid rounded" alt="Responsive image">
                                         <div class= "mt-2">
@@ -64,7 +65,7 @@
                                         <div class= "mt-2">
                                             <p class="text-justify">{{produtinhos.descricao}}</p>
                                         </div>
-                                        <div class= "mt-2 btn-primary active text-center rounded">R$ {{produtinhos.preco_produto}}</div>
+                                        <div class= "mt-2 btn-primary active text-center rounded">R$ {{produtinhos.preco_produto|floatformat:2}}</div>
                                         <div class="row">
                                             <a class="col" href="{% url 'editar_produto' produtinhos.id %}"><div class="mt-2 btn-success text-center rounded cursor-pointer">Editar</div></a>
                                             <a class="col" href="{% url 'deletar_produto' produtinhos.id %}"><div class="mt-2 btn-danger text-center rounded cursor-pointer">Deletar</div></a>

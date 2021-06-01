@@ -94,9 +94,9 @@
 
                         <!-- BARRA DE PESQUISA -->
                         <div class="row">
-                            <form>
+                            <form action="{% url 'busca_produtos' %}" method="GET">
                                 <div class="card p-3 d-flex flex-row">
-                                    <input class="form-control mr-sm-2" type="search" style="margin-left: 20px;" placeholder="Digite aqui o que deseja consultar" aria-label="Search">
+                                    <input class="form-control mr-sm-2" type="text" type="search" name="nome_busca" style="margin-left: 20px;" placeholder="Digite aqui o que deseja consultar" aria-label="Search">
 
                                     <button class="btn btn-outline-primary my-2 my-sm-0 mt-3 " type="submit">Consultar</button>
                                 </div>
@@ -119,7 +119,7 @@
                                         <div class= "mt-2">
                                             <p class="text-justify">{{pro.descricao}}</p>
                                         </div>
-                                        <div class= "mt-2 btn-primary active text-center rounded">R$ {{pro.preco_produto}}</div>
+                                        <div class= "mt-2 btn-primary active text-center rounded">R$ {{pro.preco_produto|floatformat:2}}</div>
                                         <hr>
                                         <div class= "mt-2">{{pro.email}}</div>
                                         <div class= "mt-2">

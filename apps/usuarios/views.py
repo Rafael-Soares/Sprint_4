@@ -1,4 +1,3 @@
-
 from django.core import paginator
 from django.db.models.query_utils import RegisterLookupMixin
 from django.shortcuts import get_object_or_404, render, redirect
@@ -31,6 +30,9 @@ def login(request):
             else:
                 messages.error(request,'Email ou senha inválidos')
                 return redirect('login')
+        else:
+            messages.error(request, 'O usuário não existe')
+            return redirect('login')
     else:
         return render(request, 'usuarios/login.html')
 
@@ -112,8 +114,6 @@ def dashboard(request):
         return redirect('login')
        
 def usuarios(request):
-        #produtos
-        pro = Produto.objects.order_by('-data_criacao')
         #Ultimos cadastrados
         usuarios_ultimos = User.objects.order_by('-date_joined')
         paginator2 = Paginator(usuarios_ultimos, 3)
@@ -122,11 +122,15 @@ def usuarios(request):
         
         # Usuarios na paginaçao
         usuarios = User.objects.order_by('-date_joined')
+        #realizando a busca
+        if request.method == 'GET':
+            nome = request.GET['nome_usuario']
+            usuarios = usuarios.filter(first_name__icontains=nome) 
+        #paginando
         paginator = Paginator(usuarios, 4)
         page = request.GET.get('page')
         usuarios_todos = paginator.get_page(page)
         contextUsu = { 
-            'produtos': pro,
             #tres ultimos usuarios
             'usuarios_ultimos': ultimos_usu,
             #todos os usuarios
@@ -195,7 +199,7 @@ def atualiza_usuario(request, usuario_id):
                 u.is_staff = True
             u.save()
             messages.success(request, 'Usuário alterado com sucesso!')
-            return redirect('dashboard')
+            return redirect('usuarios')
     else:
         return render(request, 'usuarios/dashboard.html')
             
